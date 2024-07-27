@@ -61,7 +61,7 @@ pub use crate::protocol::{Error, Pn532, CountDown};
 pub use crate::requests::Request;
 
 pub mod i2c;
-mod protocol;
+pub mod protocol;
 pub mod requests;
 #[cfg(feature = "std")]
 #[cfg_attr(doc, doc(cfg(feature = "std")))]
