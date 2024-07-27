@@ -5,7 +5,25 @@ use core::{
     task::{Context, Poll},
 };
 
-use embedded_hal::timer::CountDown;
+pub trait CountDown {
+    /// The unit of time used by this timer
+    type Time;
+
+    /// Starts a new count down
+    fn start<T>(&mut self, count: T)
+    where
+        T: Into<Self::Time>;
+
+    /// Non-blockingly "waits" until the count down finishes
+    ///
+    /// # Contract
+    ///
+    /// - If `Self: Periodic`, the timer will start a new count down right after the last one
+    /// finishes.
+    /// - Otherwise the behavior of calling `wait` after the last call returned `Ok` is UNSPECIFIED.
+    /// Implementers are suggested to panic on this scenario to signal a programmer error.
+    fn wait(&mut self) -> nb::Result<(), ()>;
+}
 
 use crate::{
     requests::{BorrowedRequest, Command},
